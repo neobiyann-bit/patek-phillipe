@@ -195,8 +195,6 @@ var createCss = function () {
         '    padding: 0;',
         '  line-height: normal !important;',
         ' display: flex;',
-   ' flex-direction: column;',
-   ' align-items: center;',
         '}',
 
         /* DISABLE TEXT SELECTION */
