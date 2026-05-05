@@ -1,4 +1,4 @@
-pc.script.createLoadingScreen(function (app) {
+pc.script.createLoadingScreen(function (app) { 
 
     // ──────────────────────────────────────────────
     // 1. CREATE THE SPLASH SCREEN HTML
