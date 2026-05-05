@@ -1,4 +1,4 @@
-pc.script.createLoadingScreen(function (app) { 
+pc.script.createLoadingScreen(function (app) {
 
     // ──────────────────────────────────────────────
     // 1. CREATE THE SPLASH SCREEN HTML
@@ -193,6 +193,10 @@ var createCss = function () {
         '    box-sizing: border-box;',
         '    margin: 0;',
         '    padding: 0;',
+        '  line-height: normal !important;',
+        ' display: flex;',
+   ' flex-direction: column;',
+   ' align-items: center;',
         '}',
 
         /* DISABLE TEXT SELECTION */
@@ -260,6 +264,7 @@ var createCss = function () {
         '    font-family: "Playfair Display", serif;',
         '    font-size: clamp(2.5rem, 5vw, 5.5rem);',
         '    color: #ffffff;',
+
         '}',
 
         '#custom-subtitle {',
@@ -268,6 +273,7 @@ var createCss = function () {
         '    margin-top: 0.75rem;',
         '    color: #ffffff;',
         '    opacity: 0.8;',
+
         '}',
 
         '#custom-cta {',
