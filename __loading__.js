@@ -194,7 +194,7 @@ var createCss = function () {
         '    margin: 0;',
         '    padding: 0;',
         '  line-height: normal !important;',
-        ' display: flex;',
+        ' height: 50px;',
         '}',
 
         /* DISABLE TEXT SELECTION */
