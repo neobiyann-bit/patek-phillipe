@@ -189,6 +189,15 @@ var createCss = function () {
     var css = [
         '@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600&family=Playfair+Display:wght@400&display=swap");',
 
+        '#playcanvas-wrapper, #playcanvas-wrapper * {',
+        '    box-sizing: border-box;',
+        '    margin: 0;',
+        '    padding: 0;',
+        '    font-family: "Inter", sans-serif;',
+        '    line-height: normal;',
+        '    letter-spacing: normal;',
+        '}',
+
         /* DISABLE TEXT SELECTION */
         '#custom-splash-wrapper, #custom-splash-wrapper * {',
         '    user-select: none;',
