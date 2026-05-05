@@ -193,9 +193,6 @@ var createCss = function () {
         '    box-sizing: border-box;',
         '    margin: 0;',
         '    padding: 0;',
-        '    font-family: "Inter", sans-serif;',
-        '    line-height: normal;',
-        '    letter-spacing: normal;',
         '}',
 
         /* DISABLE TEXT SELECTION */
