@@ -46,13 +46,29 @@ pc.script.createLoadingScreen(function (app) {
             // Detach logo from wrapper → body so it survives DOM removal
             if (logo) {
                 var rect = logo.getBoundingClientRect();
+
+                // Temporarily pin to exact pixels so the visual position
+                // doesn't jump when we re-parent into <body>
                 logo.style.position = 'fixed';
-                logo.style.top = rect.top + 'px';
+                logo.style.top  = rect.top + 'px';
                 logo.style.left = rect.left + 'px';
                 logo.style.transform = 'none';
                 logo.style.width = rect.width + 'px';
                 logo.style.zIndex = '999';
                 document.body.appendChild(logo);
+
+                // Now convert to responsive centering so it re-centers on resize.
+                // We keep the same visual width and vertical position, but
+                // switch left back to 50% + translateX(-50%).
+                logo.style.left = '50%';
+                logo.style.transform = 'translateX(-50%)';
+
+                // Store the "resting" values so WebsiteManager's scroll
+                // handler can animate back to them after scrolling up.
+                logo.dataset.originTop   = rect.top + 'px';
+                logo.dataset.originLeft  = '50%';
+                logo.dataset.originWidth = rect.width + 'px';
+                logo.dataset.originTransform = 'translateX(-50%)';
             }
 
             // Fade out wrapper
@@ -162,179 +178,177 @@ pc.script.createLoadingScreen(function (app) {
     // ──────────────────────────────────────────────
     // 4. CSS  (splash-screen styles ONLY)
     // ──────────────────────────────────────────────
-    var createCss = function () {
-        var css = [
-            '@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600&family=Playfair+Display:wght@400&display=swap");',
+var createCss = function () {
+    var css = [
+        '@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600&family=Playfair+Display:wght@400&display=swap");',
 
-            /* DISABLE TEXT SELECTION */
-            '#custom-splash-wrapper, #custom-splash-wrapper * {',
-            '    user-select: none;',
-            '    -webkit-user-select: none;',
-            '    -ms-user-select: none;',
-            '}',
+        /* DISABLE TEXT SELECTION */
+        '#custom-splash-wrapper, #custom-splash-wrapper * {',
+        '    user-select: none;',
+        '    -webkit-user-select: none;',
+        '    -ms-user-select: none;',
+        '}',
 
-            '#custom-splash-wrapper {',
-            '    position: absolute;',
-            '    top: 0;',
-            '    left: 0;',
-            '    width: 100%;',
-            '    height: 100%;',
-            '    background-color: #000000;',
-            '    z-index: 1000;',
-            '    overflow: hidden;',
-            '    position: relative;',
-            '}',
+        /* FIXED FULLSCREEN ROOT (IMPORTANT FIX) */
+        '#custom-splash-wrapper {',
+        '    position: fixed;',
+        '    top: 0;',
+        '    left: 0;',
+        '    width: 100vw;',
+        '    height: 100vh;',
+        '    background-color: #000000;',
+        '    z-index: 1000;',
+        '    overflow: hidden;',
+        '}',
 
-            '#custom-splash-wrapper::after {',
-            '    content: "";',
-            '    position: absolute;',
-            '    top: 0;',
-            '    left: 0;',
-            '    width: 100%;',
-            '    height: 100%;',
-            '    background: rgba(0,0,0,0.3);',
-            '    pointer-events: none;',
-            '    opacity: 1;',
-            '    z-index: 1;',
-            '    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);',
-            '}',
+        '#custom-splash-wrapper::after {',
+        '    content: "";',
+        '    position: absolute;',
+        '    top: 0;',
+        '    left: 0;',
+        '    width: 100%;',
+        '    height: 100%;',
+        '    background: rgba(0,0,0,0.3);',
+        '    pointer-events: none;',
+        '    opacity: 1;',
+        '    z-index: 1;',
+        '    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);',
+        '}',
 
-            /* CONTENT LAYERS */
-            '#custom-title-group {',
-            '    position: absolute;',
-            '    top: 50%;',
-            '    left: 50%;',
-            '    transform: translate(-50%, -50%);',
-            '    text-align: center;',
-            '    opacity: 0;',
-            '    transition: opacity 3s ease 0.3s;',
-            '    width: 100%;',
-            '    z-index: 2;',
-            '}',
+        /* CONTENT LAYERS */
+        '#custom-title-group {',
+        '    position: absolute;',
+        '    top: 50%;',
+        '    left: 50%;',
+        '    transform: translate(-50%, -50%);',
+        '    text-align: center;',
+        '    opacity: 0;',
+        '    transition: opacity 3s ease 0.3s;',
+        '    width: 100%;',
+        '    z-index: 2;',
+        '}',
 
-            '#custom-cta {',
-            '    position: relative;',
-            '    z-index: 3;',
-            '}',
+        '#custom-cta {',
+        '    position: relative;',
+        '    z-index: 3;',
+        '}',
 
-            '#custom-splash-logo {',
-            '    position: absolute;',
-            '    top: 50%;',
-            '    left: 50%;',
-            '    transform: translate(-50%, -50%) scale(1);',
-            '    width: clamp(140px, 20vw, 320px);',
-            '    transition: transform 1s cubic-bezier(0.25,0.1,0.25,1), top 1s cubic-bezier(0.25,0.1,0.25,1);',
-            '    z-index: 3;',
-            '}',
+        '#custom-splash-logo {',
+        '    position: absolute;',
+        '    top: 50%;',
+        '    left: 50%;',
+        '    transform: translate(-50%, -50%) scale(1);',
+        '    width: clamp(140px, 20vw, 320px);',
+        '    transition: transform 1s cubic-bezier(0.25,0.1,0.25,1), top 1s cubic-bezier(0.25,0.1,0.25,1);',
+        '    z-index: 3;',
+        '}',
 
-            '#custom-title {',
-            '    font-family: "Playfair Display", serif;',
-            '    font-size: clamp(2.5rem, 5vw, 5.5rem);',
-            '    color: #ffffff;',
-            '}',
+        '#custom-title {',
+        '    font-family: "Playfair Display", serif;',
+        '    font-size: clamp(2.5rem, 5vw, 5.5rem);',
+        '    color: #ffffff;',
+        '}',
 
-            '#custom-subtitle {',
-            '    font-family: "Inter", sans-serif;',
-            '    font-size: 1.125rem;',
-            '    margin-top: 0.75rem;',
-            '    color: #ffffff;',
-            '    opacity: 0.8;',
-            '}',
+        '#custom-subtitle {',
+        '    font-family: "Inter", sans-serif;',
+        '    font-size: 1.125rem;',
+        '    margin-top: 0.75rem;',
+        '    color: #ffffff;',
+        '    opacity: 0.8;',
+        '}',
 
-            '#custom-cta {',
-            '    position: relative;',
-            '    display: inline-block;',
-            '    margin-top: 2rem;',
-            '    padding: 1.2rem 3rem;',
-            '    border: 1px solid #ffffff;',
-            '    color: #ffffff;',
-            '    font-family: "Inter", sans-serif;',
-            '    font-size: 0.75rem;',
-            '    letter-spacing: 0.1em;',
-            '    background: transparent;',
-            '    opacity: 0;',
-            '    transition: opacity 3s ease 0.5s;',
-            '    cursor: pointer;',
-            '    pointer-events: auto',
-            '}',
+        '#custom-cta {',
+        '    position: relative;',
+        '    display: inline-block;',
+        '    margin-top: 2rem;',
+        '    padding: 1.2rem 3rem;',
+        '    border: 1px solid #ffffff;',
+        '    color: #ffffff;',
+        '    font-family: "Inter", sans-serif;',
+        '    font-size: 0.75rem;',
+        '    letter-spacing: 0.1em;',
+        '    background: transparent;',
+        '    opacity: 0;',
+        '    transition: opacity 3s ease 0.5s;',
+        '    cursor: pointer;',
+        '    pointer-events: auto;',
+        '}',
 
-            '#custom-progress-text {',
-            '    position: absolute;',
-            '    bottom: 13rem;',
-            '    left: 50%;',
-            '    transform: translateX(-50%);',
-            '    color: #ffffff;',
-            '    font-family: "Inter", sans-serif;',
-            '    font-size: 0.75rem;',
-            '    transition: opacity 0.5s ease;',
-            '    z-index: 2;',
-            '}',
+        '#custom-progress-text {',
+        '    position: absolute;',
+        '    bottom: 13rem;',
+        '    left: 50%;',
+        '    transform: translateX(-50%);',
+        '    color: #ffffff;',
+        '    font-family: "Inter", sans-serif;',
+        '    font-size: 0.75rem;',
+        '    transition: opacity 0.5s ease;',
+        '    z-index: 2;',
+        '}',
 
-            '#custom-progress-container {',
-            '    position: absolute;',
-            '    bottom: 12rem;',
-            '    left: 50%;',
-            '    transform: translateX(-50%);',
-            '    width: 12rem;',
-            '    height: 0.25rem;',
-            '    background-color: #333;',
-            '    transition: opacity 0.5s ease;',
-            '    z-index: 2;',
-            '}',
+        '#custom-progress-container {',
+        '    position: absolute;',
+        '    bottom: 12rem;',
+        '    left: 50%;',
+        '    transform: translateX(-50%);',
+        '    width: 12rem;',
+        '    height: 0.25rem;',
+        '    background-color: #333;',
+        '    transition: opacity 0.5s ease;',
+        '    z-index: 2;',
+        '}',
 
-            '#custom-progress-bar {',
-            '    width: 0%;',
-            '    height: 100%;',
-            '    background-color: #fff;',
-            '}',
+        '#custom-progress-bar {',
+        '    width: 0%;',
+        '    height: 100%;',
+        '    background-color: #fff;',
+        '}',
 
-            /* LOADED STATE (State 2: logo moves top-small) */
-            '#custom-splash-wrapper.loaded {',
-            '    background-color: transparent;',
-            '    pointer-events: none;',
-            '}',
+        /* LOADED STATE */
+        '#custom-splash-wrapper.loaded {',
+        '    background-color: transparent;',
+        '    pointer-events: none;',
+        '}',
 
-            '#custom-splash-wrapper.loaded #custom-splash-logo {',
-            '    top: 4%;',
-            '    transform: translate(-50%, 0) scale(0.6);',
-            '}',
+        '#custom-splash-wrapper.loaded #custom-splash-logo {',
+        '    top: 4%;',
+        '    transform: translate(-50%, 0) scale(0.6);',
+        '}',
 
-            '#custom-splash-wrapper.loaded #custom-progress-text,',
-            '#custom-splash-wrapper.loaded #custom-progress-container {',
-            '    opacity: 0;',
-            '}',
+        '#custom-splash-wrapper.loaded #custom-progress-text,',
+        '#custom-splash-wrapper.loaded #custom-progress-container {',
+        '    opacity: 0;',
+        '}',
 
-            '#custom-splash-wrapper.loaded #custom-title-group {',
-            '    opacity: 1;',
-            '}',
+        '#custom-splash-wrapper.loaded #custom-title-group {',
+        '    opacity: 1;',
+        '}',
 
-            '#custom-splash-wrapper.loaded #custom-cta {',
-            '    opacity: 1;',
-            '}',
+        '#custom-splash-wrapper.loaded #custom-cta {',
+        '    opacity: 1;',
+        '}',
 
-            /* CLICKED STATE (fade out everything) */
-            '#custom-splash-wrapper.clicked #custom-title-group,',
-            '#custom-splash-wrapper.clicked #custom-cta {',
-            '    opacity: 0;',
-            '    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);',
-            '}',
+        /* CLICKED STATE */
+        '#custom-splash-wrapper.clicked #custom-title-group,',
+        '#custom-splash-wrapper.clicked #custom-cta {',
+        '    opacity: 0;',
+        '    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);',
+        '}',
 
-            '#custom-splash-wrapper.clicked::after {',
-            '    opacity: 0;',
-            '}',
+        '#custom-splash-wrapper.clicked::after {',
+        '    opacity: 0;',
+        '}'
+    ].join('\n');
 
-        ].join('\n');
+    var style = document.createElement('style');
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
 
-        var style = document.createElement('style');
-        style.appendChild(document.createTextNode(css));
-        document.head.appendChild(style);
-
-        // GSAP LOAD
-        var script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
-        document.head.appendChild(script);
-    };
-
+    // GSAP LOAD
+    var script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
+    document.head.appendChild(script);
+};
     // ──────────────────────────────────────────────
     // SHADER WARM-UP
     // Forces PlayCanvas to compile shader variants
