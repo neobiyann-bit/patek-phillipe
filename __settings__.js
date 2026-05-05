@@ -1,5 +1,5 @@
 window.ASSET_PREFIX = "https://patek.vertex3d.asia/";
-window.SCRIPT_PREFIX = "";
+window.SCRIPT_PREFIX = "https://patek.vertex3d.asia/";
 window.SCENE_PATH = "2486024.json";
 window.CONTEXT_OPTIONS = {
     'antialias': true,
