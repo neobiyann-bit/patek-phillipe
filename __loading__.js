@@ -6,7 +6,14 @@ pc.script.createLoadingScreen(function (app) {
     var showSplash = function () {
         var wrapper = document.createElement('div');
         wrapper.id = 'custom-splash-wrapper';
-        document.body.appendChild(wrapper);
+        var isDev = window.location.href.includes('playcanvas') 
+         || window.location.href.includes('localhost');
+
+var container = isDev
+    ? document.body
+    : document.getElementById('playcanvas-wrapper') || document.body;
+
+container.appendChild(wrapper);
 
         // LOGO (State 1: big / centered)
         var logo = document.createElement('img');
