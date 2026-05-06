@@ -3,17 +3,22 @@ pc.script.createLoadingScreen(function (app) {
     // ──────────────────────────────────────────────
     // 1. CREATE THE SPLASH SCREEN HTML
     // ──────────────────────────────────────────────
-    var showSplash = function () {
-        var wrapper = document.createElement('div');
-        wrapper.id = 'custom-splash-wrapper';
-        var isDev = window.location.href.includes('playcanvas') 
-         || window.location.href.includes('localhost');
+var showSplash = function () {
+    var wrapper = document.createElement('div');
+    wrapper.id = 'custom-splash-wrapper';
 
-var container = isDev
-    ? document.body
-    : document.getElementById('playcanvas-wrapper') || document.body;
+    // 1. Keep your environment check (needed for PlayCanvas editor)
+    var isDev = window.location.href.includes('playcanvas') || window.location.href.includes('localhost');
 
-container.appendChild(wrapper);
+    // 2. Safely find the container
+    // If it's Dev, use body. If it's Production, try to find the wrapper, 
+    // BUT fallback to body if the wrapper isn't ready yet.
+    var container = isDev 
+        ? document.body 
+        : (document.getElementById('playcanvas-wrapper') || document.body);
+
+    container.appendChild(wrapper);
+
 
         // LOGO (State 1: big / centered)
         var logo = document.createElement('img');
