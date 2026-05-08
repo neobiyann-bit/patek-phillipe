@@ -257,7 +257,7 @@ var createCss = function () {
         '    top: 50%;',
         '    left: 50%;',
         '    transform: translate(-50%, -50%) scale(1);',
-        '    width: clamp(140px, 20vw, 320px);',
+        '    width: clamp(180px, 20vw, 320px);',
         '    transition: transform 1s cubic-bezier(0.25,0.1,0.25,1), top 1s cubic-bezier(0.25,0.1,0.25,1);',
         '    z-index: 3;',
         '}',
@@ -333,7 +333,7 @@ var createCss = function () {
 
         '#custom-splash-wrapper.loaded #custom-splash-logo {',
         '    top: 4%;',
-        '    transform: translate(-50%, 0) scale(0.6);',
+        '    transform: translate(-50%, 0) scale(0.8);',
         '}',
 
         '#custom-splash-wrapper.loaded #custom-progress-text,',
