@@ -333,7 +333,7 @@ var createCss = function () {
 
         '#custom-splash-wrapper.loaded #custom-splash-logo {',
         '    top: 4%;',
-        '    transform: translate(-50%, 0) scale(0.8);',
+        '    transform: translate(-50%, 0) scale(0.7);',
         '}',
 
         '#custom-splash-wrapper.loaded #custom-progress-text,',
