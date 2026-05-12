@@ -254,7 +254,7 @@ var createCss = function () {
 
         '#custom-splash-logo {',
         '    position: absolute;',
-        '    top: 50%;',
+        '    top: 45%;',
         '    left: 50%;',
         '    transform: translate(-50%, -50%) scale(1);',
         '    width: clamp(180px, 20vw, 320px);',
@@ -293,6 +293,11 @@ var createCss = function () {
         '    transition: opacity 3s ease 0.5s;',
         '    cursor: pointer;',
         '    pointer-events: auto;',
+        '    transition: opacity 1.5s ease, padding 0.3s ease;',
+        '}',
+
+         '#custom-cta:hover {',
+        '    padding: 1.2rem 3.5rem;',
         '}',
 
         '#custom-progress-text {',
